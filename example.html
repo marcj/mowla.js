@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+<head>
+    <script type="text/javascript" src="mowla.js" ></script>
+    <script type="text/javascript">
+        window.onload = function(){
+            mowlaRender(document.getElementById('source'), {
+                name: 'peter',
+                messages: [
+                    {title: 'Hallolo', url: '/1'}
+                ]
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="source">
+        Hi {name}!<br/>
+
+        {if messages.length}
+            You got message:<br/>
+            {foreach messages as message}
+                <a href="{message.url}">{message.title}</a><br/>
+            {/foreach}
+        {/if}
+    </div>
+</body>
+</html>
