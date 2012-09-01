@@ -45,7 +45,7 @@ Main functions are:
 
 ## Usage
 
-Actually, anything is possible, what in javascript is possible, but there's also
+Actually, anything is possible, what in javascript is possible, but there're also
 some additional calls available.
 
 ### Output
