@@ -4,26 +4,79 @@
 <head>
     <script type="text/javascript" src="mowla.js" ></script>
     <script type="text/javascript">
+
+        function awesomeResult(){
+            return 'Awesome!';
+        }
+
         window.onload = function(){
-            mowlaRender(document.getElementById('source'), {
+            var data = {
                 name: 'peter',
+                that: {is: {awesome:{too: 'YES'}}},
                 messages: [
-                    {title: 'Hallolo', url: '/1'}
-                ]
-            });
+                    {title: 'Hallolo', url: '/1'},
+                    {title: 'Asd', url: '/2'}
+                ],
+                tags: ['peter', 'you', 'are', 'a', 'mowla']
+            }
+            mowlaRender(document.getElementById('source'), data);
+
+            var renderedTemplate = mowla(document.getElementById('source').innerHTML, data);
         }
     </script>
 </head>
 <body>
     <div id="source">
-        Hi {name}!<br/>
+        Hi {name}!<br/><br/>
+
+        \{myExampleCall\}<br/><br/>
 
         {if messages.length}
-            You got message:<br/>
+            You got messages:
+            <ol>
             {foreach messages as message}
-                <a href="{message.url}">{message.title}</a><br/>
+                <li><a href="{message.url}">#{index} {message.title}</a></li>
             {/foreach}
+            </ol>
+        {else}
+            No messages. :-(
         {/if}
+
+        Tags:
+        {foreach tags as tag}
+            <a href="/tag/{tag}">{tag}</a>{if !last}, {/if}
+        {/foreach}
+
+        <br/><br/>
+        Tags simple: {tags.join(',')}
+
+        <br/><br/>
+
+        Awesome is {awesomeResult()}<br/>
+        Suppresed: {call awesomeResult()}
+
+        <br/><br/>
+        {call if(true)\{ _ += 'yay'; \}}
+
+        <br/><br/>
+        Some path?: {that.is.awesome.too}
+        <br/><br/>
+
+
+        {var temp = 'too'}
+        Some path?: {that.is.awesome[temp]}
+        <br/><br/>
+
+
+        {for var i=0; i<10; i++}
+            {i}
+        {/for}
+        <br/><br/>
+
+        {var i=0}
+        {while i < 10}
+            {i++}
+        {/for}
     </div>
 </body>
 </html>
