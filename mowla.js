@@ -61,26 +61,26 @@
      * @return {String}
      */
     this.mowla.getCode = function(pSource){
-        return 'with(data){ _ = \''+
+        return 'with(data){ var ___ = \''+
             pSource
                 .replace(/\n/g, "'+\"\\n\"\n+'")
 
-                .replace(/([^\\])\{\/(if|for|while)\}/g, "$1'; \\} _ += \'") //close if
-                .replace(/([^\\])\{else\}/g, "$1'; \\} else \\{ _ += \'") //close if
-                .replace(/([^\\])\{\/foreach\}/g, "$1'; \\}); _ += \'") //close foreach
+                .replace(/([^\\])\{\/(if|for|while)\}/g, "$1'; \\} ___ += \'") //close if
+                .replace(/([^\\])\{else\}/g, "$1'; \\} else \\{ ___ += \'") //close if
+                .replace(/([^\\])\{\/foreach\}/g, "$1'; \\}); ___ += \'") //close foreach
                 .replace(/([^\\])\{foreach ([^\}]*) as ([^\}]*)\}/g, "$1'; mowla.forEach($2, function($3, first, last, index)\\{ _ += \'") //foreach shorty
                 
-                .replace(/([^\\])\{call ([^\}\\]*(?:\\.[^}\\]*)*)\}/g, "$1'; $2; _ += \'") //silent calls
-                .replace(/([^\\])\{html ([^\}\\]*(?:\\.[^}\\]*)*)\}/g, "$1'; _ += ($2); _ += \'") //escape outputs
-                .replace(/([^\\])\{(if|for|while) ([^}]*)\}/g, "$1'; $2 ($3) \\{ _ += \'") //if, for, while
-                .replace(/([^\\])\{var ([^}]*)\}/g, "$1'; ($2); _ += \'")
+                .replace(/([^\\])\{call ([^\}\\]*(?:\\.[^}\\]*)*)\}/g, "$1'; $2; ___ += \'") //silent calls
+                .replace(/([^\\])\{html ([^\}\\]*(?:\\.[^}\\]*)*)\}/g, "$1'; ___ += ($2); ___ += \'") //escape outputs
+                .replace(/([^\\])\{(if|for|while) ([^}]*)\}/g, "$1'; $2 ($3) \\{ ___ += \'") //if, for, while
+                .replace(/([^\\])\{var ([^}]*)\}/g, "$1'; ($2); ___ += \'")
 
-                .replace(/([^\\])\{/g, "$1'; _ += mowla.escape(") //{
-                .replace(/([^\\])\}/g, "$1); _ += \'") //}
+                .replace(/([^\\])\{/g, "$1'; ___ += mowla.escape(") //{
+                .replace(/([^\\])\}/g, "$1); ___ += \'") //}
 
                 .replace(/\\\{/g, '{')
                 .replace(/\\\}/g, '}')+
-            '\'; return _;}';
+            '\'; return ___;}';
     };
 
 

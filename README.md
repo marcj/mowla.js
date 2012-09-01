@@ -164,14 +164,14 @@ Example:
 
 ```
 
-You have access to the output through the _ var.
+You have access to the output through the ___ (three underscores) var.
 Example:
 ```html
     
-    {call if(true)\{ _ += 'yay!' \}}
+    {call if(true)\{ ___ += 'yay!' \}}
 
-    {_} <!-- prints the code till to this line -->
-    {_.substr(0,10)} <!-- prints the code till to this line but only the first 10 chars -->
+    {___} <!-- prints the code till to this line -->
+    {___.substr(0,10)} <!-- prints the code till to this line but only the first 10 chars -->
 
 ```
 
