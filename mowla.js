@@ -1,6 +1,6 @@
 /**
  * Mowla javascript template 'engine'.
- * 
+ *
  * Licensed under the shizzle dizzle MIT license.
  *
  * @author MArc Schmidt <https://github.com/MArcJ>
@@ -14,6 +14,7 @@
 
     /**
      * Renders the source and returns the rendered shizzle.
+     *
      * @param  {String} pSource Template sourcecode
      * @param  {Object} pData   Data to use. Default is window.
      * @return {String} Shizzeled sourcecode.
@@ -38,6 +39,7 @@
 
     /**
      * Compiles the template source and returns the function.
+     *
      * @param  {String} pSource Template sourcecode
      * @return {Function} The created function with one 'data' argument.
      */
@@ -56,6 +58,7 @@
 
     /**
      * Generates the javascript code from the html sourcecode.
+     *
      * @internal
      * @param  {String} pSource
      * @return {String}
@@ -68,7 +71,7 @@
                 .replace(/([^\\])\{\/(if|for|while)\}/g, "$1'; \\} ___ += \'") //close if
                 .replace(/([^\\])\{else\}/g, "$1'; \\} else \\{ ___ += \'") //close if
                 .replace(/([^\\])\{\/foreach\}/g, "$1'; \\}); ___ += \'") //close foreach
-                .replace(/([^\\])\{foreach ([^\}]*) as ([^\}]*)\}/g, "$1'; mowla.forEach($2, function($3, first, last, index)\\{ _ += \'") //foreach shorty
+                .replace(/([^\\])\{foreach ([^\}]*) as ([^\}]*)\}/g, "$1'; mowla.forEach($2, function($3, first, last, index)\\{ ___ += \'") //foreach shorty
                 
                 .replace(/([^\\])\{call ([^\}\\]*(?:\\.[^}\\]*)*)\}/g, "$1'; $2; ___ += \'") //silent calls
                 .replace(/([^\\])\{html ([^\}\\]*(?:\\.[^}\\]*)*)\}/g, "$1'; ___ += ($2); ___ += \'") //escape outputs
@@ -86,6 +89,7 @@
 
     /**
      * Returns the size of the array/object.
+     *
      * @internal
      * @param  {mixed} pArObj A array or object
      * @return {integer} The size
@@ -126,6 +130,7 @@
 
     /**
      * Escapes pValue so you can use it safly in HTML.
+     *
      * Replaces < and > with &lt; and &gt;
      * @param  {String} pValue
      * @return {String} Filtered string
@@ -137,6 +142,7 @@
 
     /**
      * Replaces HTML entities which we need for javascript operations.
+     *
      * @param  {String} pHtml
      * @return {String}
      */
