@@ -28,6 +28,17 @@ This means nothing is true, everything is permitted. ;-)
 </script>
 ```
 
+## Features
+
++ Compiles html to javascript and caches it.
++ Very light with 2,4K, gzipped 0.97K.
++ Everything Javascript is permitted.
++ Escapes HTML per default.
++ No external dependencies.
++ Should work on most browsers. (Feel free to test it and send a ticket)
++ No disgusting <% and %>. :>
+
+
 ## API
 Please look at the docs above the functions. It's well documented.
 
