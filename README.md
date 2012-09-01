@@ -1,4 +1,4 @@
-# Mowla.js - Shizzle dizzle JavaScript Template Engine
+# mowla.js - Shizzle dizzle JavaScript Template Engine
 
 ## What?
 
