@@ -159,7 +159,7 @@ Example:
 
 ```
 
-To use { and } in regular way, just esacpe it.
+To use { and } in regular way, just escape it.
 
 ```html
 
