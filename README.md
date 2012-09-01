@@ -9,7 +9,7 @@ This means nothing is true, everything is permitted. ;-)
 
 ## Demo
 ```html
-<script type="text/javascript" src="mowla.js" ></script>
+<script type="text/javascript" src="mowla.min.js" ></script>
 <script type="text/javascript">
 
     var data = {
