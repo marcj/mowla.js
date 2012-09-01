@@ -83,7 +83,7 @@ Anything is possible.
 ### Assigment
 
 Anything is possible.
-If you assign a value to a var inside of a loop, then the var is only visible inside this loop. Just declare the var outside of the loop to make it global visible.
+If you assign a value to a var inside of a foreach loop, then the var is only visible inside this loop. Just declare the var outside of the loop to make it global visible.
 ```html
 
     {var name = 'Mowla'}
