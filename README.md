@@ -36,10 +36,10 @@ Main functions are:
 ```javascript
 
     //Renders source and returns the rendered shizzle.
-    var rendered = mowla('Hello {name}', {name: 'Mowla'});
+    var rendered = mowla.fetch('Hello {name}', {name: 'Mowla'});
 
     //Renders source of the element's html and apply the rendered shizzle to the same element.
-    mowlaRender(document.getElementById('container'), {name: 'Mowla'});
+    mowla.render(document.getElementById('container'), {name: 'Mowla'});
 
 ```
 
@@ -50,9 +50,14 @@ some additional calls available.
 
 ### Output
 
+Per default, we replace all < and > with html equivalent to be safe.
+
+If you want to inject HTML use {html <var>} to do this.
 ```html
     
-    Normal variable: My name is {name}.
+    Normal variable: My name is {name}. 
+
+    Unsafe output: {html myHtmlSource}
 
     Paths possible: {mySettings.sub.item}
 

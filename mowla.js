@@ -10,6 +10,9 @@
 
     var cache = {};
 
+
+    this.mowla = {};
+
     /**
      * Returns the size of the array/object.
      * 
@@ -17,7 +20,7 @@
      * @param  {mixed} pArObj A array or object
      * @return {integer} The size
      */
-    this.mowlaLength = function(pArObj){
+    this.mowla.length = function(pArObj){
         if (typeof(pArObj) == 'array') return pArObj.length;
 
         if ('keys' in Object)
@@ -36,9 +39,9 @@
      * @param  {mixed} pArObj  A array or object
      * @param  {Function} pCb  pCallback function for each item
      */
-    this.mowlaForEach = function(pArObj, pCb){
+    this.mowla.forEach = function(pArObj, pCb){
         var i = 0;
-        var length = this.mowlaLength(pArObj);
+        var length = mowla.length(pArObj);
         if( Object.prototype.toString.call(pArObj) !== '[object Array]' ) {
             for (i in pArObj) if (pArObj.hasOwnProperty(i)) pCb(pArObj[i], i==0, i==length-1, (i++)+1);
         } else {
@@ -52,8 +55,8 @@
      * @param  {Element} pSource The DOM element
      * @param  {Object}  pData   Data to use. Default is window.
      */
-    this.mowlaRender = function(pSource, pData){
-        pSource.innerHTML = mowla(pSource, pData);
+    this.mowla.render = function(pSource, pData){
+        pSource.innerHTML = mowla.fetch(pSource, pData);
     }
 
     /**
@@ -62,13 +65,27 @@
      * @param  {String} pSource Template sourcecode
      * @return {Function} The created function with one 'data' argument.
      */
-    this.mowlaCompile = function(pSource){
+    this.mowla.compile = function(pSource){
         try {
-            return new Function('data', mowlaGetCode(pSource));
+           return new Function('data', code = mowla.getCode(pSource));
         } catch(e){
-            
+            console.log('[mowla.compile] error in following generated code');
+            console.log(code);
+            throw e;
         }
     },
+
+
+    /**
+     * Escapes pValue so you can use it safly in HTML.
+     * Replaces < and > with &lt; and &gt;
+     * 
+     * @param  {String} pValue
+     * @return {String} Filtered string
+     */
+    this.mowla.escape = function(pValue){
+        return typeof(pValue) == 'string' ? pValue.replace(/</g, '&lt;').replace(/>/g, '&gt;') : pValue;
+    }
 
     /**
      * Generates the javascript code from the html sourcecode.
@@ -77,7 +94,7 @@
      * @param  {String} pSource
      * @return {String}
      */
-    this.mowlaGetCode = function(pSource){
+    this.mowla.getCode = function(pSource){
         return 'with(data){ _ = \''+
             pSource
                 .replace(/\n/g, "'+\"\\n\"\n+'")
@@ -85,13 +102,14 @@
                 .replace(/([^\\])\{\/(if|for|while)\}/g, "$1'; \\} _ += \'") //close if
                 .replace(/([^\\])\{else\}/g, "$1'; \\} else \\{ _ += \'") //close if
                 .replace(/([^\\])\{\/foreach\}/g, "$1'; \\}); _ += \'") //close foreach
-                .replace(/([^\\])\{foreach ([^\}]*) as ([^\}]*)\}/g, "$1'; mowlaForEach\($2, function\($3, first, last, index\)\\{ _ += \'") //foreach shorty
+                .replace(/([^\\])\{foreach ([^\}]*) as ([^\}]*)\}/g, "$1'; mowla.forEach\($2, function\($3, first, last, index\)\\{ _ += \'") //foreach shorty
                 
-                .replace(/([^\\])\{call ([^\}\\]*(?:\\.[^}\\]*)*)\}/g, "$1'; $2; _ += \'") //anything else
-                .replace(/([^\\])\{(if|for|while) ([^}]*)\}/g, "$1'; $2 ($3) \\{ _ += \'") //anything else
-                .replace(/([^\\])\{var ([^}]*)\}/g, "$1'; ($2); _ += \'") //anything else
+                .replace(/([^\\])\{call ([^\}\\]*(?:\\.[^}\\]*)*)\}/g, "$1'; $2; _ += \'") //silent calls
+                .replace(/([^\\])\{html ([^\}\\]*(?:\\.[^}\\]*)*)\}/g, "$1'; _ += ($2); _ += \'") //escape outputs
+                .replace(/([^\\])\{(if|for|while) ([^}]*)\}/g, "$1'; $2 ($3) \\{ _ += \'") //if, for, while
+                .replace(/([^\\])\{var ([^}]*)\}/g, "$1'; ($2); _ += \'")
 
-                .replace(/([^\\]){/g, "$1'; _ += (") //{
+                .replace(/([^\\]){/g, "$1'; _ += mowla.escape(") //{
                 .replace(/([^\\])}/g, "$1); _ += \'") //}
 
                 .replace(/\\{/g, '{')
@@ -106,7 +124,7 @@
      * @param  {String} pHtml
      * @return {String}
      */
-    this.mowlaHtmlEntities = function(pHtml){
+    this.mowla.htmlEntities = function(pHtml){
         return pHtml.replace(/&amp;/g, '&').replace(/&gt;/g, '>').replace(/&lt;/g, '<');
     }
 
@@ -117,11 +135,11 @@
      * @param  {Object} pData   Data to use. Default is window.
      * @return {String} Shizzeled sourcecode.
      */
-    this.mowla = function(pSource, pData){
+    this.mowla.fetch = function(pSource, pData){
         if (!pData) pData = window;
         if(typeof(pSource) == 'object' && 'innerHTML' in pSource)
-            return mowla(mowlaHtmlEntities(pSource.innerHTML), pData);
-        return (cache[pSource] || (cache[pSource] = mowlaCompile(pSource)))(pData);
+            return mowla.fetch(mowla.htmlEntities(pSource.innerHTML), pData);
+        return (cache[pSource] || (cache[pSource] = mowla.compile(pSource)))(pData);
     }
 
 })();

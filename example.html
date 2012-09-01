@@ -17,11 +17,15 @@
                     {title: 'Hallolo', url: '/1'},
                     {title: 'Asd', url: '/2'}
                 ],
-                tags: ['peter', 'you', 'are', 'a', 'mowla']
+                tags: ['peter', 'you', 'are', 'a', 'mowla'],
+                someHtml: '<b>Hi folk</b>'
             }
-            mowlaRender(document.getElementById('source'), data);
 
-            var renderedTemplate = mowla(document.getElementById('source').innerHTML, data);
+            var source = mowla.htmlEntities(document.getElementById('source').innerHTML);
+            var renderedTemplate = mowla.fetch(source, data);
+
+            mowla.render(document.getElementById('source'), data);
+
         }
     </script>
 </head>
@@ -30,6 +34,8 @@
         Hi {name}!<br/><br/>
 
         \{myExampleCall\}<br/><br/>
+
+        {someHtml} => {html someHtml}<br/><br/>
 
         {if messages.length}
             You got messages:
