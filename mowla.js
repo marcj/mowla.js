@@ -64,26 +64,52 @@
      * @return {String}
      */
     this.mowla.getCode = function(pSource){
+        var r = function(v){
+            var matches = v.match(/^\{(.*)$/gm), i;
+            for(i = matches.length; i >= 0; i--){
+                if (matches[i]){
+                    v = v
+                        .replace(matches[i], matches[i]
+                            .replace(/\\\\\'/g, '\'')
+                            .replace(/\\\\\{/g, '{')
+                            .replace(/\\\\\}/g, '}')
+                        );
+                }
+            }
+            return v.replace(/\\'/g, '\'');
+        };
         return 'with(data){ var ___ = \''+
-            pSource
-                .replace(/\n/g, "'+\"\\n\"\n+'")
+            r(
+                pSource
+                .replace(/'/g, '\\\'')
+                .replace(/\\/g, '\\\\')
+                .replace(/\\\n/g, '\\\\\n')
+                .replace(/([^\\])\{/g, "$1\\\n{")
+                .replace(/([^\\])\}/g, "$1\\\n}")
+            )
 
-                .replace(/([^\\])\{\/(if|for|while)\}/g, "$1'; \\} ___ += \'") //close if
-                .replace(/([^\\])\{else\}/g, "$1'; \\} else \\{ ___ += \'") //close if
-                .replace(/([^\\])\{\/foreach\}/g, "$1'; \\}); ___ += \'") //close foreach
-                .replace(/([^\\])\{foreach ([^\}]*) as ([^\}]*)\}/g, "$1'; mowla.forEach($2, function($3, first, last, index)\\{ ___ += \'") //foreach shorty
+                .replace(/^\{\/(if|for|while)\\\n\}/gm, "'; } ___ += \'") //close if
+                .replace(/^\{else\\\n\}/gm, "'; } else { ___ += \'") //close if
                 
-                .replace(/([^\\])\{call ([^\}\\]*(?:\\.[^}\\]*)*)\}/g, "$1'; $2; ___ += \'") //silent calls
-                .replace(/([^\\])\{html ([^\}\\]*(?:\\.[^}\\]*)*)\}/g, "$1'; ___ += ($2); ___ += \'") //escape outputs
-                .replace(/([^\\])\{(if|for|while) ([^}]*)\}/g, "$1'; $2 ($3) \\{ ___ += \'") //if, for, while
-                .replace(/([^\\])\{var ([^}]*)\}/g, "$1'; ($2); ___ += \'")
+                
+                .replace(/^\{\/if\\\n\}/gm, "'; }; ___ += \'") //close foreach
+                .replace(/^\{\/foreach\\\n\}/gm, "'; }); ___ += \'") //close foreach
+                
+                .replace(/^\{foreach ([^\}]*) as ([^\}]*)\\\n\}/gm, "'; mowla.forEach($1, function($2, first, last, index){ ___ += \'") //foreach shorty
+                
+                .replace(/^\{call (.*)\\\n\}/gm, "'; $1; ___ += \'") //silent calls
+                .replace(/^\{html (.*)\\\n\}/gm, "'; ___ += ($1); ___ += \'") //escape outputs
+                .replace(/^\{(if|for|while) ([^}]*)\\\n\}/gm, "'; $1 ($2) { ___ += \'") //if, for, while
+                .replace(/^\{var ([^}]*)\\\n\}/gm, "'; var $1; ___ += \'")
+                
+                .replace(/^\{/gm, "'; ___ += mowla.escape(") //{
+                .replace(/^\}/gm, "); ___ += \'") //}
+                
+                .replace(/([^\\])\\\n/g, "$1")
+                .replace(/\\\n/g, "\n")
 
-                .replace(/([^\\])\{/g, "$1'; ___ += mowla.escape(") //{
-                .replace(/([^\\])\}/g, "$1); ___ += \'") //}
-
-                .replace(/\\\{/g, '{')
-                .replace(/\\\}/g, '}')+
-            '\'; return ___;}';
+                .replace(/\n/g, "'+\"\\n\"\n+'")+
+                '\'; return ___;}';
     };
 
 
