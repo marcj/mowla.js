@@ -19,10 +19,10 @@ This means nothing is true, everything is permitted. ;-)
 
     var templateSource = 'Hi {name}!<br/>'+
     '{foreach tags as tag}'+
-        '<a href="/tag/{tag}">{tag}{if !last}, {/if}'+
+        '<a href="/tag/{tag}">{tag}</a>{if !last}, {/if}'+
     '{/foreach}';
 
-    var renderedTemplate = mowla(templateSource, data);
+    var renderedTemplate = mowla.fetch(templateSource, data);
     document.write(renderedTemplate); //Hi peter! ...
 
 </script>
